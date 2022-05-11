@@ -1,0 +1,13 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright 2019 NXP
+ * Copyright 2020-2021 Trucrux Ltd.
+ */
+
+#include "imx8mp-trux.dtsi"
+#include "imx8mp-trux-8MDVP-common.dtsi"
+
+/ {
+	model = "Trucrux TRUX-MX8M-PLUS on 8MDVP 1.4 and below";
+};
+

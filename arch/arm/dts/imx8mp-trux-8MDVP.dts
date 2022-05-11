@@ -1,0 +1,79 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright 2019 NXP
+ * Copyright 2020-2021 Trucrux Ltd.
+ */
+
+#include "imx8mp-trux.dtsi"
+#include "imx8mp-trux-8MDVP-common.dtsi"
+
+/ {
+	model = "Trucrux TRUX-MX8M-PLUS on 8MDVP 2.0 and above";
+
+	aliases {
+		gpio5 = &pca6408_1;
+		gpio6 = &pca6408_2;
+	};
+};
+
+&i2c4 {
+	pca6408_1: gpio@20 {
+		compatible = "ti,tca6408";
+		reg = <0x20>;
+		gpio-controller;
+		#gpio-cells = <2>;
+	};
+
+	pca6408_2: gpio@21 {
+		compatible = "ti,tca6408";
+		reg = <0x21>;
+		gpio-controller;
+		#gpio-cells = <2>;
+
+		eth1_phy_rst_hog {
+			gpio-hog;
+			gpios = <0 0>;
+			output-high;
+			line-name = "eth1_phy_rst";
+		};
+	};
+};
+
+&eqos {
+	mdio {
+		ethphy1: ethernet-phy@1 {
+			compatible = "ethernet-phy-ieee802.3-c22";
+			reg = <1>;
+			at803x,eee-disabled;
+			at803x,vddio-1p8v;
+			eee-broken-1000t;
+		};
+	};
+};
+
+&fec {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_fec>;
+	phy-mode = "rgmii";
+	phy-handle = <&ethphy1>;
+	status = "disabled";
+};
+
+&iomuxc {
+	pinctrl_fec: fecgrp {
+		fsl,pins = <
+			MX8MP_IOMUXC_SAI1_RXD4__ENET1_RGMII_RD0				0x91
+			MX8MP_IOMUXC_SAI1_RXD5__ENET1_RGMII_RD1				0x91
+			MX8MP_IOMUXC_SAI1_RXD6__ENET1_RGMII_RD2				0x91
+			MX8MP_IOMUXC_SAI1_RXD7__ENET1_RGMII_RD3				0x91
+			MX8MP_IOMUXC_SAI1_TXC__ENET1_RGMII_RXC				0x91
+			MX8MP_IOMUXC_SAI1_TXFS__ENET1_RGMII_RX_CTL			0x91
+			MX8MP_IOMUXC_SAI1_TXD0__ENET1_RGMII_TD0				0x00
+			MX8MP_IOMUXC_SAI1_TXD1__ENET1_RGMII_TD1				0x00
+			MX8MP_IOMUXC_SAI1_TXD2__ENET1_RGMII_TD2				0x00
+			MX8MP_IOMUXC_SAI1_TXD3__ENET1_RGMII_TD3				0x00
+			MX8MP_IOMUXC_SAI1_TXD4__ENET1_RGMII_TX_CTL			0x00
+			MX8MP_IOMUXC_SAI1_TXD5__ENET1_RGMII_TXC				0x00
+		>;
+	};
+};
